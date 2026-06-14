@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useAppStore } from '../store/useAppStore'
 import { Parcela, FORMAS_PAGAMENTO, MESES } from '../types'
 import { getParcelasDoMes } from '../utils/parcelamentos'
@@ -7,6 +7,7 @@ import Badge from '../components/Badge'
 import MonthPills from '../components/MonthPills'
 import Modal from '../components/Modal'
 import { FormField, Input, Select } from '../components/FormField'
+import { importarParcelamentosCSV } from '../utils/importCSV'
 
 function newId() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
@@ -24,12 +25,33 @@ const emptyForm = (): Omit<Parcela, 'id'> => ({
 type Filtro = 'todos' | 'cartao' | 'outros' | 'ativos'
 
 export default function Parcelamentos() {
-  const { parcelas, mesAtivo, anoAtivo, addParcela, updateParcela, deleteParcela } = useAppStore()
-  const [modal, setModal] = useState<'add' | 'edit' | null>(null)
+  const { parcelas, mesAtivo, anoAtivo, addParcela, updateParcela, deleteParcela, importarParcelas } = useAppStore()
+  const [modal, setModal] = useState<'add' | 'edit' | 'importar' | null>(null)
   const [editando, setEditando] = useState<Parcela | null>(null)
   const [form, setForm] = useState(emptyForm())
   const [filtro, setFiltro] = useState<Filtro>('todos')
   const [valorInput, setValorInput] = useState('')
+  const [anoImport, setAnoImport] = useState(new Date().getFullYear())
+  const [resultadoImport, setResultadoImport] = useState<string | null>(null)
+  const inputCSVRef = useRef<HTMLInputElement>(null)
+
+  function handleCSV(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const text = ev.target?.result as string
+      const novasParcelas = importarParcelamentosCSV(text, anoImport)
+      if (novasParcelas.length === 0) {
+        setResultadoImport('Nenhum parcelamento encontrado no arquivo.')
+        return
+      }
+      importarParcelas(novasParcelas)
+      setResultadoImport(`✅ ${novasParcelas.length} parcelamentos importados com sucesso!`)
+    }
+    reader.readAsText(file, 'utf-8')
+    e.target.value = ''
+  }
 
   function abrirAdd() {
     setForm(emptyForm())
@@ -99,12 +121,20 @@ export default function Parcelamentos() {
             </button>
           ))}
         </div>
-        <button
-          onClick={abrirAdd}
-          className="bg-green-600 hover:bg-green-500 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors"
-        >
-          + Novo parcelamento
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => { setResultadoImport(null); setModal('importar') }}
+            className="bg-[#1e2535] hover:bg-[#252d3d] text-slate-300 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors"
+          >
+            📥 Importar CSV
+          </button>
+          <button
+            onClick={abrirAdd}
+            className="bg-green-600 hover:bg-green-500 text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors"
+          >
+            + Novo parcelamento
+          </button>
+        </div>
       </div>
 
       {/* Tabela */}
@@ -249,6 +279,42 @@ export default function Parcelamentos() {
                 Salvar
               </button>
             </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Modal Importar CSV */}
+      {modal === 'importar' && (
+        <Modal title="Importar Parcelamentos do CSV" onClose={() => { setModal(null); setResultadoImport(null) }}>
+          <div className="space-y-4">
+            <p className="text-slate-400 text-sm">
+              Selecione o arquivo <span className="text-green-400 font-mono">Controle de gastos - Parcelamentos.csv</span>.
+            </p>
+            <FormField label="Ano dos parcelamentos">
+              <Input
+                type="number"
+                value={anoImport}
+                onChange={(e) => setAnoImport(parseInt(e.target.value) || new Date().getFullYear())}
+              />
+            </FormField>
+            <input ref={inputCSVRef} type="file" accept=".csv" onChange={handleCSV} className="hidden" />
+            <button
+              onClick={() => inputCSVRef.current?.click()}
+              className="w-full border-2 border-dashed border-[#1e2535] hover:border-green-500/40 rounded-lg py-6 text-slate-500 hover:text-green-400 transition-all text-sm"
+            >
+              📂 Clique para selecionar o arquivo CSV
+            </button>
+            {resultadoImport && (
+              <div className={`rounded-lg px-3 py-2 text-sm ${resultadoImport.startsWith('✅') ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                {resultadoImport}
+              </div>
+            )}
+            <button
+              onClick={() => { setModal(null); setResultadoImport(null) }}
+              className="w-full bg-[#1e2535] text-slate-400 hover:text-slate-200 text-sm py-2 rounded-lg"
+            >
+              Fechar
+            </button>
           </div>
         </Modal>
       )}
