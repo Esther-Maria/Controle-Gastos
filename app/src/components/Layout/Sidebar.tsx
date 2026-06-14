@@ -10,8 +10,10 @@ const navItems = [
   { id: 'relatorios', icon: '📋', label: 'Relatórios' },
 ]
 
+const ajudaItem = { id: 'ajuda', icon: '💡', label: 'Ajuda' }
+
 // Itens que aparecem na barra inferior do mobile (os mais usados)
-const mobileNav = navItems.slice(0, 5)
+const mobileNav = [...navItems.slice(0, 4), ajudaItem]
 
 export default function Sidebar() {
   const { paginaAtiva, setPagina, parcelas } = useAppStore()
@@ -72,6 +74,19 @@ export default function Sidebar() {
 
           <div className="text-[9px] text-slate-600 uppercase tracking-widest px-2 pt-3 pb-1">Dados</div>
           <ImportarCSV />
+
+          <div className="text-[9px] text-slate-600 uppercase tracking-widest px-2 pt-3 pb-1">Suporte</div>
+          <button
+            onClick={() => setPagina(ajudaItem.id)}
+            className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12px] transition-all ${
+              paginaAtiva === ajudaItem.id
+                ? 'bg-blue-500/10 text-blue-400'
+                : 'text-slate-400 hover:bg-[#1e2535] hover:text-slate-200'
+            }`}
+          >
+            <span className="text-sm w-4 text-center">{ajudaItem.icon}</span>
+            {ajudaItem.label}
+          </button>
         </nav>
       </aside>
 
@@ -83,7 +98,7 @@ export default function Sidebar() {
             onClick={() => setPagina(item.id)}
             className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all flex-1 ${
               paginaAtiva === item.id
-                ? 'text-green-400'
+                ? item.id === 'ajuda' ? 'text-blue-400' : 'text-green-400'
                 : 'text-slate-500'
             }`}
           >

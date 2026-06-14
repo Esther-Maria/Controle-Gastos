@@ -7,6 +7,7 @@ import Parcelamentos from './pages/Parcelamentos'
 import LancamentosPage from './pages/LancamentosPage'
 import Investimentos from './pages/Investimentos'
 import Relatorios from './pages/Relatorios'
+import Ajuda from './pages/Ajuda'
 import Modal from './components/Modal'
 import { FormField, Select } from './components/FormField'
 import { useAppStore as store } from './store/useAppStore'
@@ -48,6 +49,7 @@ export default function App() {
       case 'receitas': return <LancamentosPage tipo="receita" />
       case 'investimentos': return <Investimentos />
       case 'relatorios': return <Relatorios />
+      case 'ajuda': return <Ajuda />
       default: return <Dashboard />
     }
   }
