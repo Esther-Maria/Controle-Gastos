@@ -75,7 +75,7 @@ export default function LancamentosPage({ tipo }: Props) {
   return (
     <div className="flex-1 overflow-y-auto p-5 space-y-4">
       {/* Totais por categoria */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="bg-[#161b27] border border-[#1e2535] rounded-xl p-4 col-span-1">
           <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Total no mês</p>
           <p className={`text-xl font-bold ${cor}`}>{formatBRL(total)}</p>
@@ -96,14 +96,14 @@ export default function LancamentosPage({ tipo }: Props) {
       </div>
 
       {/* Tabela */}
-      <div className="bg-[#161b27] border border-[#1e2535] rounded-xl overflow-hidden">
+      <div className="bg-[#161b27] border border-[#1e2535] rounded-xl overflow-x-auto">
         {itens.length === 0 ? (
           <div className="py-12 text-center text-slate-600 text-sm">
             Nenhum lançamento.{' '}
             <button onClick={abrirAdd} className={tipo === 'receita' ? 'text-green-500 underline' : 'text-red-500 underline'}>Adicionar</button>
           </div>
         ) : (
-          <table className="w-full text-[11px]">
+          <table className="w-full text-[11px] min-w-[400px]">
             <thead>
               <tr className="border-b border-[#1e2535]">
                 {['Descrição','Categoria','Valor','Forma',''].map((h) => (

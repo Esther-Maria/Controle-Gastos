@@ -59,7 +59,7 @@ export default function Relatorios() {
         <div className="px-4 py-3 border-b border-[#1e2535]">
           <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Relatório Anual — {anoAtivo}</p>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto -mx-0">
           <table className="w-full text-[11px]">
             <thead>
               <tr className="border-b border-[#1e2535]">

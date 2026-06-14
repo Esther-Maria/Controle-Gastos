@@ -71,7 +71,7 @@ export default function Dashboard() {
   return (
     <div className="flex-1 overflow-y-auto p-5 space-y-4">
       {/* KPI */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <KpiCard label="Receitas" value={receitasMes} color="green" sub="no mês" />
         <KpiCard label="Despesas" value={totalDespesasComParcelas} color="red" sub="inclui parcelamentos" />
         <KpiCard label="Investimentos" value={investimentosMes} color="blue" sub={receitasMes > 0 ? `${Math.round(investimentosMes / receitasMes * 100)}% da receita` : ''} />
@@ -79,7 +79,7 @@ export default function Dashboard() {
       </div>
 
       {/* Gráficos */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Bar */}
         <div className="bg-[#161b27] border border-[#1e2535] rounded-xl p-4">
           <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-3">Evolução Anual</p>
@@ -147,7 +147,8 @@ export default function Dashboard() {
         {parcelasNoMes.length === 0 ? (
           <div className="py-8 text-center text-slate-600 text-xs">Nenhum parcelamento ativo neste mês</div>
         ) : (
-          <table className="w-full text-[11px]">
+          <div className="overflow-x-auto">
+          <table className="w-full text-[11px] min-w-[500px]">
             <thead>
               <tr className="border-b border-[#1e2535]">
                 <th className="text-left text-[9px] text-slate-600 uppercase tracking-wider px-4 py-2">Descrição</th>
@@ -167,11 +168,12 @@ export default function Dashboard() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
 
         {/* Totais rodapé */}
         {parcelasNoMes.length > 0 && (
-          <div className="grid grid-cols-3 border-t border-[#1e2535]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 border-t border-[#1e2535]">
             {[
               { label: 'Total no Mês', value: totaisParcelas.totalMes, color: 'text-red-400' },
               { label: 'Total Cartão', value: totaisParcelas.totalCartao, color: 'text-blue-400' },

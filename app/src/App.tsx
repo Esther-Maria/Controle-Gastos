@@ -57,7 +57,10 @@ export default function App() {
       <Sidebar />
       <div className="flex flex-col flex-1 min-w-0">
         <Topbar onAddLancamento={() => setShowLancamento(true)} />
-        {renderPage()}
+        {/* pb-16 no mobile para não ficar atrás da barra inferior */}
+        <div className="flex flex-col flex-1 min-h-0 pb-16 md:pb-0">
+          {renderPage()}
+        </div>
       </div>
       {showLancamento && <LancamentoRapidoModal onClose={() => setShowLancamento(false)} />}
     </div>

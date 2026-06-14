@@ -85,8 +85,8 @@ export default function Parcelamentos() {
   return (
     <div className="flex-1 overflow-y-auto p-5">
       {/* Cabeçalho */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-1 bg-[#1e2535] rounded-lg p-1">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 justify-between mb-4">
+        <div className="flex flex-wrap gap-1 bg-[#1e2535] rounded-lg p-1 w-full sm:w-auto">
           {filtros.map((f) => (
             <button
               key={f.id}
@@ -108,14 +108,14 @@ export default function Parcelamentos() {
       </div>
 
       {/* Tabela */}
-      <div className="bg-[#161b27] border border-[#1e2535] rounded-xl overflow-hidden">
+      <div className="bg-[#161b27] border border-[#1e2535] rounded-xl overflow-hidden overflow-x-auto">
         {filtradas.length === 0 ? (
           <div className="py-12 text-center text-slate-600 text-sm">
             Nenhum parcelamento encontrado.{' '}
             <button onClick={abrirAdd} className="text-green-500 underline">Adicionar</button>
           </div>
         ) : (
-          <table className="w-full text-[11px]">
+          <table className="w-full text-[11px] min-w-[600px]">
             <thead>
               <tr className="border-b border-[#1e2535]">
                 {['Descrição','Valor Total','Parcela','Forma','Meses',''].map((h) => (
