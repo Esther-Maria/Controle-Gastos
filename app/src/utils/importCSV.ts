@@ -11,8 +11,10 @@ function parseMoeda(str: string): number {
 }
 
 const FORMAS_MAP: Record<string, FormaPagamento> = {
-  'santander': 'santander',
-  'nubank': 'nubank',
+  'santander': 'cartao',
+  'nubank': 'cartao',
+  'cartao': 'cartao',
+  'cartão': 'cartao',
   'pix': 'pix',
   'boleto': 'boleto',
   'dinheiro': 'dinheiro',

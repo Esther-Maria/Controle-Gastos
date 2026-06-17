@@ -40,9 +40,7 @@ export default function ImportarCSV() {
       {open && (
         <Modal title="Importar Parcelamentos do CSV" onClose={() => { setOpen(false); setResultado(null) }}>
           <div className="space-y-4">
-            <p className="text-slate-400 text-sm">
-              Selecione o arquivo <span className="text-green-400 font-mono">Controle de gastos - Parcelamentos.csv</span> para importar seus parcelamentos existentes.
-            </p>
+            <p className="text-slate-400 text-sm">Selecione um arquivo CSV para importar.</p>
 
             <div>
               <label className="text-[11px] text-slate-400 font-medium block mb-1">Ano dos parcelamentos</label>

@@ -60,6 +60,12 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'controle-gastos-data',
+      onRehydrateStorage: () => (state) => {
+        if (!state) return
+        const migrar = (f: string) => (f === 'santander' || f === 'nubank' ? 'cartao' : f)
+        state.parcelas = state.parcelas.map((p) => ({ ...p, formaPagamento: migrar(p.formaPagamento) as any }))
+        state.lancamentos = state.lancamentos.map((l) => ({ ...l, formaPagamento: l.formaPagamento ? migrar(l.formaPagamento) as any : undefined }))
+      },
     }
   )
 )

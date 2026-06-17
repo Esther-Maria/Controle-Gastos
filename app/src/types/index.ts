@@ -1,4 +1,4 @@
-export type FormaPagamento = 'santander' | 'nubank' | 'pix' | 'boleto' | 'dinheiro' | 'outro'
+export type FormaPagamento = 'cartao' | 'pix' | 'boleto' | 'dinheiro' | 'outro'
 
 export type CategoriaReceita =
   | 'Salário'
@@ -46,7 +46,7 @@ export interface Lancamento {
   valor: number
   mes: number
   ano: number
-  formaPagamento: FormaPagamento
+  formaPagamento?: FormaPagamento
 }
 
 export interface Investimento {
@@ -66,19 +66,17 @@ export const MESES = [
 export const MESES_CURTO = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
 
 export const FORMAS_PAGAMENTO: { value: FormaPagamento; label: string }[] = [
-  { value: 'santander', label: 'Santander' },
-  { value: 'nubank', label: 'Nubank' },
+  { value: 'cartao', label: 'Cartão' },
   { value: 'pix', label: 'Pix' },
   { value: 'boleto', label: 'Boleto' },
   { value: 'dinheiro', label: 'Dinheiro' },
   { value: 'outro', label: 'Outro' },
 ]
 
-export const isCartao = (f: FormaPagamento) => f === 'santander' || f === 'nubank'
+export const isCartao = (f: FormaPagamento) => f === 'cartao'
 
 export const BADGE_CORES: Record<FormaPagamento, string> = {
-  santander: 'bg-red-500/20 text-red-400',
-  nubank: 'bg-purple-500/20 text-purple-400',
+  cartao: 'bg-blue-500/20 text-blue-400',
   pix: 'bg-green-500/20 text-green-400',
   boleto: 'bg-yellow-500/20 text-yellow-400',
   dinheiro: 'bg-emerald-500/20 text-emerald-400',

@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useAppStore } from '../store/useAppStore'
-import { Lancamento, FormaPagamento, FORMAS_PAGAMENTO } from '../types'
+import { Lancamento } from '../types'
 import { formatBRL, parseBRL } from '../utils/currency'
-import Badge from '../components/Badge'
 import Modal from '../components/Modal'
 import { FormField, Input, Select } from '../components/FormField'
 
@@ -29,7 +28,6 @@ export default function LancamentosPage({ tipo }: Props) {
     valor: 0,
     mes: mesAtivo,
     ano: anoAtivo,
-    formaPagamento: 'nubank',
   })
 
   const categorias = tipo === 'receita' ? CATEGORIAS_RECEITA : CATEGORIAS_DESPESA
@@ -44,7 +42,7 @@ export default function LancamentosPage({ tipo }: Props) {
   itens.forEach((l) => { catMap[l.categoria] = (catMap[l.categoria] || 0) + l.valor })
 
   function abrirAdd() {
-    setForm({ tipo, descricao: '', categoria: categorias[0], valor: 0, mes: mesAtivo, ano: anoAtivo, formaPagamento: 'nubank' })
+    setForm({ tipo, descricao: '', categoria: categorias[0], valor: 0, mes: mesAtivo, ano: anoAtivo })
     setValorInput('')
     setModal('add')
   }
@@ -103,10 +101,10 @@ export default function LancamentosPage({ tipo }: Props) {
             <button onClick={abrirAdd} className={tipo === 'receita' ? 'text-green-500 underline' : 'text-red-500 underline'}>Adicionar</button>
           </div>
         ) : (
-          <table className="w-full text-[11px] min-w-[400px]">
+          <table className="w-full text-[11px] min-w-[300px]">
             <thead>
               <tr className="border-b border-[#1e2535]">
-                {['Descrição','Categoria','Valor','Forma',''].map((h) => (
+                {['Descrição','Categoria','Valor',''].map((h) => (
                   <th key={h} className="text-left text-[9px] text-slate-600 uppercase tracking-wider px-4 py-2.5">{h}</th>
                 ))}
               </tr>
@@ -117,7 +115,6 @@ export default function LancamentosPage({ tipo }: Props) {
                   <td className="px-4 py-3 text-slate-200">{l.descricao}</td>
                   <td className="px-4 py-3 text-slate-400">{l.categoria}</td>
                   <td className={`px-4 py-3 font-semibold ${cor}`}>{formatBRL(l.valor)}</td>
-                  <td className="px-4 py-3"><Badge forma={l.formaPagamento as FormaPagamento} /></td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button onClick={() => abrirEdit(l)} className="text-slate-400 hover:text-slate-200 text-xs px-2 py-1 bg-[#1e2535] rounded">✏️</button>
@@ -152,11 +149,6 @@ export default function LancamentosPage({ tipo }: Props) {
                 </Select>
               </FormField>
             </div>
-            <FormField label="Forma de Pagamento">
-              <Select value={form.formaPagamento} onChange={(e) => setForm({ ...form, formaPagamento: e.target.value as FormaPagamento })}>
-                {FORMAS_PAGAMENTO.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
-              </Select>
-            </FormField>
             <div className="flex gap-2 pt-2">
               <button onClick={fechar} className="flex-1 bg-[#1e2535] text-slate-400 hover:text-slate-200 text-sm py-2 rounded-lg">Cancelar</button>
               <button onClick={salvar} className={`flex-1 ${bgCor} text-white text-sm font-semibold py-2 rounded-lg transition-colors`}>Salvar</button>
