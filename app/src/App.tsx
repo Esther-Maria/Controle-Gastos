@@ -8,6 +8,7 @@ import LancamentosPage from './pages/LancamentosPage'
 import Investimentos from './pages/Investimentos'
 import Relatorios from './pages/Relatorios'
 import Ajuda from './pages/Ajuda'
+import ImportarModal from './components/ImportarModal'
 import Modal from './components/Modal'
 import { FormField, Select } from './components/FormField'
 import { useAppStore as store } from './store/useAppStore'
@@ -65,6 +66,7 @@ export default function App() {
         </div>
       </div>
       {showLancamento && <LancamentoRapidoModal onClose={() => setShowLancamento(false)} />}
+      <ImportarModal />
     </div>
   )
 }

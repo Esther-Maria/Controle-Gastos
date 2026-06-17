@@ -1,5 +1,4 @@
 import { useAppStore } from '../../store/useAppStore'
-import ImportarCSV from '../ImportarCSV'
 
 const navItems = [
   { id: 'dashboard', icon: '📊', label: 'Dashboard' },
@@ -16,7 +15,7 @@ const ajudaItem = { id: 'ajuda', icon: '💡', label: 'Ajuda' }
 const mobileNav = [...navItems.slice(0, 4), ajudaItem]
 
 export default function Sidebar() {
-  const { paginaAtiva, setPagina, parcelas } = useAppStore()
+  const { paginaAtiva, setPagina, parcelas, setImportarModalAberto } = useAppStore()
 
   return (
     <>
@@ -73,7 +72,13 @@ export default function Sidebar() {
           ))}
 
           <div className="text-[9px] text-slate-600 uppercase tracking-widest px-2 pt-3 pb-1">Dados</div>
-          <ImportarCSV />
+          <button
+            onClick={() => setImportarModalAberto(true)}
+            className="w-full text-left flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[12px] text-slate-400 hover:bg-[#1e2535] hover:text-slate-200 transition-all"
+          >
+            <span className="text-sm w-4 text-center">📥</span>
+            Importar CSV
+          </button>
 
           <div className="text-[9px] text-slate-600 uppercase tracking-widest px-2 pt-3 pb-1">Suporte</div>
           <button

@@ -9,9 +9,11 @@ interface AppState {
   lancamentos: Lancamento[]
   investimentos: Investimento[]
   paginaAtiva: string
+  importarModalAberto: boolean
 
   setPagina: (p: string) => void
   setMesAno: (mes: number, ano: number) => void
+  setImportarModalAberto: (v: boolean) => void
 
   addParcela: (p: Parcela) => void
   updateParcela: (p: Parcela) => void
@@ -39,8 +41,10 @@ export const useAppStore = create<AppState>()(
       lancamentos: [],
       investimentos: [],
       paginaAtiva: 'dashboard',
+      importarModalAberto: false,
 
       setPagina: (p) => set({ paginaAtiva: p }),
+      setImportarModalAberto: (v) => set({ importarModalAberto: v }),
 
       setMesAno: (mes, ano) => set({ mesAtivo: mes, anoAtivo: ano }),
 
@@ -60,6 +64,10 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'controle-gastos-data',
+      partialize: (s) => ({
+        mesAtivo: s.mesAtivo, anoAtivo: s.anoAtivo, parcelas: s.parcelas,
+        lancamentos: s.lancamentos, investimentos: s.investimentos, paginaAtiva: s.paginaAtiva,
+      }),
       onRehydrateStorage: () => (state) => {
         if (!state) return
         const migrar = (f: string) => (f === 'santander' || f === 'nubank' ? 'cartao' : f)
